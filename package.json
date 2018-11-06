@@ -23,9 +23,11 @@
     "dependencies": {
         "@types/react": "^16.4.18",
         "@types/react-dom": "^16.0.9",
+        "@types/rot-js": "^0.6.4",
         "lodash": "^4.17.11",
         "react": "^16.6.0",
         "react-dom": "^16.6.0",
+        "rot-js": "^2.0.0",
         "source-map-loader": "^0.2.4"
     },
     "devDependencies": {

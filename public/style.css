@@ -1,0 +1,17 @@
+    * {
+        margin: 0px;
+        padding: 0px;
+    }
+    
+    body {
+        background-color: #2f343d;
+    }
+    
+    #app>div {
+        background-color: #444649;
+        margin: 10px;
+    }
+    
+    .map-container {
+        display: flex;
+    }
