@@ -4,16 +4,24 @@ var fs = require('fs');
 
 const config = {
     mode: 'development',
-    entry: "./src/index.ts",
+    entry: "./src/index.tsx",
     module: {
         rules: [{
             test: /\.tsx?$/,
             use: 'ts-loader',
             exclude: /node_modules/
-        }]
+        }, {
+            enforce: "pre",
+            test: /\.js$/,
+            loader: "source-map-loader"
+        }],
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js']
+    },
+    externals: {
+        "react": "React",
+        "react-dom": "ReactDOM"
     },
     output: {
         filename: "main.js",
@@ -22,7 +30,7 @@ const config = {
     },
     watch: true,
     devServer: {
-        contentBase: path.join(__dirname, 'public'),
+        contentBase: [path.join(__dirname, 'public'), './'],
         compress: true,
         port: 8080
     },
