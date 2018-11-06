@@ -1,9 +1,14 @@
 {
     "compilerOptions": {
         "sourceMap": true,
-        "module": "commonjs",
         "esModuleInterop": true,
         "resolveJsonModule": true,
+        "noImplicitAny": true,
+        "allowJs": true,
+        "strict": true, // Strict types, eg. prohibits `var x=0; x=null`
+        "alwaysStrict": true, // Enable JavaScript's "use strict" mode
+        "moduleResolution": "node", // Tell tsc to look in node_modules for modules
+        "module": "es6",
         "target": "es5",
         "jsx": "react",
         "lib": [

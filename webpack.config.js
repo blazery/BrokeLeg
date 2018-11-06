@@ -1,8 +1,20 @@
 const path = require('path');
+var fs = require('fs');
 
-module.exports = {
+
+const config = {
     mode: 'development',
-    entry: "./dist/index.js",
+    entry: "./src/index.ts",
+    module: {
+        rules: [{
+            test: /\.tsx?$/,
+            use: 'ts-loader',
+            exclude: /node_modules/
+        }]
+    },
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js']
+    },
     output: {
         filename: "main.js",
         path: __dirname + "/build",
@@ -19,3 +31,17 @@ module.exports = {
     },
     devtool: 'source-map'
 };
+
+if (process.env.BUILD_TYPE === 'production') {
+    config.watch = false;
+    // destination.txt will be created or overwritten by default.
+    if (!fs.existsSync('./build')) {
+        fs.mkdirSync('./build');
+    }
+    fs.copyFile('./public/index.html', './build/index.html', (err) => {
+        if (err) throw err;
+        console.log('source.txt was copied to destination.txt');
+    });
+}
+
+module.exports = config;
