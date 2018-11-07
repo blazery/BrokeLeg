@@ -1,7 +1,7 @@
 import { WorldNameConstants } from "../Managers/worldManager";
 import Move, {Directions} from '../Actions/move';
 import Action from '../Actions/action';
-
+import VM, { ViewNames } from '../Managers/viewManager';
 
 export interface IPlayerOptions {
 
@@ -24,7 +24,7 @@ export class Player {
         this._currentWorld = WorldNameConstants.DEFAULT;
 
         this._actions = new Map<string, Action>([
-            [Move.name, new Move({ dirs: (<any>Object).values(Directions)})]
+            [Move.name, new Move({ dirs: (<any>Object).values(Directions), centerCamera: true})]
         ])
     }
 
@@ -45,12 +45,22 @@ export class Player {
     public setPosition(x: number, y: number, worldName: string){
         this._position = [x,y]
         this._currentWorld = worldName;
+
+        if(this._health){
+            const view = VM.getView(ViewNames.MAIN)
+            view && view.center(x,y);
+        }
     }
     public get position() {
         return this._position;
     }
+    
     public get currentWorld() {
         return this._currentWorld;
+    }
+
+    public useEnergy(n: number){
+        this._legPower -= n;
     }
 }
 

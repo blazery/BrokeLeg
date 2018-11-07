@@ -27,6 +27,7 @@ export default class View {
     private _lookAtWorldName: string;
     private _displayType: DisplayTypes;
     private _display: Display;
+    private _centerDeadZone: Array<number> = [5,3];
 
 
 
@@ -59,6 +60,39 @@ export default class View {
                     displayToUse.draw(x, y, ch, fg, bg)
                 }
             }
+        }
+    }
+
+    public center(x: number, y: number){
+        const [wd, hd] = this.getViewPortDimensions(this._display);
+        const [cx, cy] = this._position;
+        const [dx, dy] = this._centerDeadZone;
+        
+        const 
+            centerX = cx + Math.floor(wd / 2),
+            centerY = cy + Math.floor(hd / 2),
+            leftBound = centerX - dx,
+            rightBound = centerX + dx,
+            topBound = centerY - dy,
+            bottomBound = centerY + dy;
+
+        let xpan = 0, ypan = 0;
+
+        if (x < leftBound){
+            xpan = x - leftBound;
+        } else if (x > rightBound){
+            xpan = x - rightBound;
+        }
+
+        if (y < topBound){
+            ypan = y - topBound;
+        } else if (y > bottomBound) {
+            ypan = y - bottomBound;
+        }
+
+        if(xpan || ypan){
+            this._position = [cx + xpan, cy + ypan];
+            this.render()
         }
     }
 
@@ -108,6 +142,12 @@ export default class View {
 
     private getScreenPosition(x: number, y: number): Array<number> | null {
         const [xp, yp] = this._position;
-        return [x + xp, y + yp];
+        const [wd, hd] = this.getViewPortDimensions(this._display);
+
+        if(x < xp) return null;
+        if(y < yp) return null;
+        if(y > yp + hd) return null
+        if(x > xp + wd) return null
+        return [x - xp, y - yp];
     }
 }

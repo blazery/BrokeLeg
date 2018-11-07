@@ -15,3 +15,24 @@
     .map-container {
         display: flex;
     }
+    
+    .app-container {
+        display: flex;
+        flex-direction: row;
+    }
+    
+    .interface-panel {
+        margin-left: 10px;
+        background-color: blue;
+        display: flex;
+        flex-direction: column;
+        height: 500px;
+        width: 50px;
+    }
+    
+    .playerStatus {
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        background: green;
+    }

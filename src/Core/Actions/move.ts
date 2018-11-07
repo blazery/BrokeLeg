@@ -32,11 +32,25 @@ const DirectionMap = {
 export default class Move extends Action {
     public name: string = ActionName;
     private _dirs: Array<string>;
+    private _energyCost: number;
+    private _centerCamera: boolean;
+
     constructor(opt: any) {
         super();
         this._dirs = [];
+        this._energyCost = 1;
+        this._centerCamera = false;
+
         if(opt.dirs){
             this._dirs = opt.dirs as Array<string>;
+        }
+
+        if(opt.energyCost){
+            this._energyCost = opt.energyCost
+        }
+
+        if (opt.centerCamera) {
+            this._centerCamera = opt.centerCamera
         }
     }
     
@@ -61,6 +75,12 @@ export default class Move extends Action {
                 [ex, ey],
                 [nx, ny]
             ])
+
+            if (view && this._centerCamera){
+                view.center(nx, ny);
+            }
+
+            ent.useEnergy(this._energyCost);
         }else{
             console.log('there is a wall there')
         }
