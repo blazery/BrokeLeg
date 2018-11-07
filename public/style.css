@@ -26,13 +26,10 @@
         background-color: blue;
         display: flex;
         flex-direction: column;
-        height: 500px;
-        width: 50px;
     }
     
     .playerStatus {
         display: flex;
         flex-direction: column;
-        width: 300px;
         background: green;
     }

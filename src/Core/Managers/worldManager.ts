@@ -23,7 +23,7 @@ export class WorldManager {
         this._worlds.set(WorldNameConstants.DEFAULT, new World(20,15, WorldNameConstants.DEFAULT))
     }
 
-    public createCaveWorld(display: Rot.Display): void{
+    public createCaveWorld(): void{
         const w = 165, h = 52;
         const map = new Rot.Map.Cellular(w, h, {topology: 8});
         const floorPlan: Array<Array<number>> = [];

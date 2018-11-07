@@ -67,20 +67,20 @@ export default class Move extends Action {
 
         if(currentPosTile && newPosTile){
             if(!newPosTile.hasWall){
-            currentPosTile.removeEntity(ent);
-            newPosTile.addEntity(ent);
+                ent.useEnergy(this._energyCost);
 
-            const view = VM.getView(ViewNames.MAIN);
-            view && view.updateWorldPositions([
-                [ex, ey],
-                [nx, ny]
-            ])
+                currentPosTile.removeEntity(ent);
+                newPosTile.addEntity(ent);
 
-            if (view && this._centerCamera){
-                view.center(nx, ny);
-            }
+                const view = VM.getView(ViewNames.MAIN);
+                view && view.updateWorldPositions([
+                    [ex, ey],
+                    [nx, ny]
+                ])
 
-            ent.useEnergy(this._energyCost);
+                if (view && this._centerCamera){
+                    view.center(nx, ny);
+                }
         }else{
             console.log('there is a wall there')
         }

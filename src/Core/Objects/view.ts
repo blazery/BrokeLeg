@@ -26,9 +26,8 @@ export default class View {
     private _dimensions: Array<number>;
     private _lookAtWorldName: string;
     private _displayType: DisplayTypes;
-    private _display: Display;
     private _centerDeadZone: Array<number> = [5,3];
-
+    protected _display: Display;
 
 
     constructor({width, height, x = 0, y = 0, worldName, displayType, display}: IViewOptions) {
@@ -58,6 +57,9 @@ export default class View {
                 if(tile){
                     const {ch, fg, bg} = tile.render();
                     displayToUse.draw(x, y, ch, fg, bg)
+                }else{
+                    // render empty space
+                    displayToUse.draw(x, y, '#','#adaeb2', '#2c2e33')
                 }
             }
         }
@@ -113,6 +115,10 @@ export default class View {
                 }
             }
         }
+    }
+
+    public get currentDisplay(){
+        return this._display;
     }
 
     private getViewPortDimensions(display: Display): Array<number> {

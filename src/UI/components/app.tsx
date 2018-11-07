@@ -18,24 +18,20 @@ export interface AppProps {
 }
 
 export class App extends React.Component<AppProps, AppState> {
-    public readonly state: AppState = {
-        display: new Rot.Display({width: 100, height: 30, layout: 'rect', fontSize: 24 })
-    }
-
     constructor(props: Object, ...rest: Array<any>){
         super(props, ...rest);
 
         CM.init();
-        VM.init(this.state.display);
-        WM.createCaveWorld(this.state.display);
+        VM.init();
+        WM.createCaveWorld();
         WM.getWorld(WorldNameConstants.CAVE).spawnPlayer(Player);
-        VM.renderView(ViewNames.MAIN, this.state.display);
+        VM.renderView(ViewNames.MAIN);
     }
 
     render() {
         return (
         <div className={'app-container'} >
-                <MapViewer displayCanvas={this.state.display.getContainer()}/>
+                <MapViewer/>
                 <InterFacePanel/>
         </div>
         );

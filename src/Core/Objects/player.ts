@@ -17,7 +17,7 @@ export class Player {
 
 
     constructor({}: IPlayerOptions) {
-        this._health = 100;
+        this._health = 10;
         this._hunger = 0
         this._legPower = 50;
         this._position = [0,0]; 
@@ -59,8 +59,42 @@ export class Player {
         return this._currentWorld;
     }
 
+    public get health(){
+        return this._health;
+    }
+
+    public get legPower() {
+        return this._legPower;
+    }
+
+    public reduceHP(n: number){
+        const newValue = this._health - n;
+        if (newValue < 0) {
+            this._health = 0
+        } else {
+            this._health = newValue
+            VM.getView(ViewNames.SIDE).render();
+        }
+    }
+
     public useEnergy(n: number){
-        this._legPower -= n;
+        const newValue = this._legPower - n;
+        if(newValue < 0){
+            this._legPower = 0
+            this.reduceHP(1);
+            console.log('you are too tired to move, but push yourself to do it anyway.')
+        }else{
+            this._legPower = newValue
+            VM.getView(ViewNames.SIDE).render();
+        }
+    }
+
+    public canUseEnergy(n: number): boolean{
+        if(this._legPower - n > 0){
+            return true
+        } else{
+            return false;
+        }
     }
 }
 

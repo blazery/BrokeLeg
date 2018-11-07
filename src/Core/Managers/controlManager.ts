@@ -29,14 +29,7 @@ export class ControlManager {
             this._activeControlHandler.handle(e);
         }
     }
-
-
 }
-
-
-
-
-
 
 const cm = new ControlManager();
 export default cm;
