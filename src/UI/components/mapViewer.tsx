@@ -5,7 +5,7 @@ export interface MapViewerState {
 }
 
 export interface MapViewerProps {
-    displayCanvas: HTMLCanvasElement;
+    displayCanvas: Node;
 }
 
 

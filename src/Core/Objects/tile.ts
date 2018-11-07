@@ -1,7 +1,11 @@
+import {Player} from "./player";
+
 export interface ITileOptions {
     x: number;
     y: number;
-    objects? : Array<Object>;
+    worldName: string
+    isWall?: boolean;
+    objects? : Array<Player>;
 }
 
 export interface ITileRender {
@@ -14,21 +18,49 @@ export interface ITileRender {
 
 export default class Tile {
     private _position: Array<number>;
-    private _objects: Array<object>;
+    private _objects: Array<Player>;
+    private _hasWall: boolean;
+    private _worldName: string;
 
 
-    constructor({x,y, objects}: ITileOptions) {
+    constructor({ x, y, isWall, objects, worldName}: ITileOptions) {
         this._position = [x,y]
+        this._hasWall = !!isWall;
         this._objects = objects || [];
+        this._worldName = worldName;
     }
 
     public render(): ITileRender {
         const [x,y] = this._position;
 
         if(this._objects.length){
-            return {x,y, ch: '@'}
+            const renderInfo = this._objects[0].render();
+            return { x, y, ...renderInfo}
         }
 
-        return { x, y, ch: '⋅'}
+        if(this._hasWall){
+            return { x, y, ch: '#', fg: '#adaeb2', bg:'#2c2e33' }
+        }
+
+        return { x, y, ch: '⋅', fg: '#adaeb2', bg: '#2c2e33'}
+    }
+
+    public addEntity(ent: Player){
+        this._objects.push(ent);
+        const [x,y] = this._position;
+        ent.setPosition(x,y, this._worldName);
+    }
+
+    public removeEntity(ent: Player) {
+        const index = this._objects.indexOf(ent)
+        if(index === -1){
+            console.warn('entity not found: ', ent);
+            return;
+        }
+        const result = this._objects.splice(index,1)
+    }
+
+    public get hasWall(){
+        return this._hasWall;
     }
 }

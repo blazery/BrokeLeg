@@ -1,10 +1,15 @@
 import * as React from "react";
 import * as Rot from 'rot-js';
 import MapViewer from './MapViewer';
+import WM, { WorldNameConstants } from '../../Core/Managers/worldManager'
+import CM from '../../Core/Managers/controlManager';
+import VM, { ViewNames } from '../../Core/Managers/viewManager';
+
 import View from '../../Core/Objects/view';
+import Player from "../../Core/Objects/player";
 
 export interface AppState{
-    display: any;
+    display: Rot.Display;
 }
 
 export interface AppProps {
@@ -19,8 +24,11 @@ export class App extends React.Component<AppProps, AppState> {
     constructor(props: Object, ...rest: Array<any>){
         super(props, ...rest);
 
-        const view = new View({width: 25, height: 25});
-        view.render(this.state.display);
+        WM.createCaveWorld(this.state.display);
+        WM.getWorld(WorldNameConstants.CAVE).spawnPlayer(Player);
+        CM.init();
+        VM.init(this.state.display);
+        VM.renderView(ViewNames.MAIN, this.state.display);
     }
 
 

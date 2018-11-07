@@ -48,7 +48,7 @@ if (process.env.BUILD_TYPE === 'production') {
     }
     fs.copyFile('./public/index.html', './build/index.html', (err) => {
         if (err) throw err;
-        console.log('source.txt was copied to destination.txt');
+        console.log('Copied index.html');
     });
 }
 
