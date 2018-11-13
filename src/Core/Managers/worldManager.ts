@@ -24,17 +24,20 @@ export class WorldManager {
     }
 
     public createCaveWorld(): void{
-        const w = 165, h = 52;
-        const map = new Rot.Map.Cellular(w, h, {topology: 8});
+        const w = 165, h = 52, s = 4;
+        const map = new Rot.Map.Cellular(w, h);
         const floorPlan: Array<Array<number>> = [];
         for(let i = 0 ; i < w ; i++){
             floorPlan[i] = []
         }
 
         map.randomize(0.5);
-        map.create((x,y,c) =>{
-            floorPlan[x][y] = c;
-        });
+        for (let i = 0; i < s; i++) {
+            map.create((x, y, c) => {
+                floorPlan[x][y] = c;
+            });
+        }
+      
         map.connect((x, y, c) => {
             floorPlan[x][y] = c;
         }, 1)

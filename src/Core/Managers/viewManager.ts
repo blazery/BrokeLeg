@@ -20,15 +20,6 @@ export class ViewManager {
         this._views.set(ViewNames.SIDE, new StatusView({ width: 25, height: 25, worldName: WorldNameConstants.CAVE, display: playerStatusDisplay }));
     }
 
-    public renderView(viewName: ViewNames, display? :Display){
-        const view = this._views.get(viewName);
-        if(view){
-            view.render(display);
-        }else{
-            console.warn('no view found.')
-        }
-    }
-
     public getView(viewName: ViewNames): View {
         const view = this._views.get(viewName);
         if (view) {

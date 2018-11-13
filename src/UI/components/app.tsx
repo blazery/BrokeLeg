@@ -25,7 +25,7 @@ export class App extends React.Component<AppProps, AppState> {
         VM.init();
         WM.createCaveWorld();
         WM.getWorld(WorldNameConstants.CAVE).spawnPlayer(Player);
-        VM.renderView(ViewNames.MAIN);
+        VM.getView(ViewNames.MAIN).render();
     }
 
     render() {
