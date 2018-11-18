@@ -63,4 +63,8 @@ export default class Tile {
     public get hasWall(){
         return this._hasWall;
     }
+
+    public get Objects(){
+        return this._objects;
+    }
 }

@@ -1,11 +1,14 @@
 import Tile from './tile'
 import {Player} from './player';
 import {RNG} from 'rot-js';
+import LightMap from './lightMap';
 
 export default class World{
     private _positions: Array<Array<Tile>>;
     private _dimensions: Array<number>;
     private _name: string
+    private _lightMap: LightMap;
+    private _explorationMap: Map<string, string> = new Map<string, string>();
 
     constructor(width: number, height: number, name: string){
         this._positions = [];
@@ -17,12 +20,30 @@ export default class World{
         }
         this._dimensions = [width, height];
         this._name = name;
+        this._lightMap = new LightMap(width, height, this);
+    }
+
+    private _computeLightMap(){
+        this._lightMap.compute();
     }
 
     public getTileAt(x: number, y: number): Tile | null {
         const column = this._positions[x];
         if (column && column[y]) return column[y];
         return null
+    }
+
+    public addToExplorationMap(positions: Array<Array<number>> ){
+        for (const [x,y] of positions){
+            const stringCoord = `${x},${y}`;
+            if (!this._explorationMap.get(stringCoord)){
+                this._explorationMap.set(stringCoord, stringCoord);
+            }
+        }
+    }
+
+    public get explorationMap(): Map<string, string> {
+        return this._explorationMap;
     }
 
     public setFloorPlan(plan: Array<Array<number>>){
@@ -35,6 +56,7 @@ export default class World{
             }
         }
         this._dimensions = [width, height];
+        //this._computeLightMap();
     }
 
     public spawnPlayer(player: Player){

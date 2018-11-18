@@ -46,10 +46,12 @@ export class Player {
         this._position = [x,y]
         this._currentWorld = worldName;
 
-        if(this._health){
-            const view = VM.getView(ViewNames.MAIN)
-            view && view.center(x,y);
+        const view = VM.getView(ViewNames.MAIN)
+        if(view){
+            view.center(x, y);
+            view.updateFov();
         }
+        
     }
     public get position() {
         return this._position;

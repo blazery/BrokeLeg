@@ -1,8 +1,8 @@
 import Action from "./action";
-import { Player } from "../Objects/player";
+import PlayerObject, { Player } from "../Objects/player";
 import WM from '../Managers/worldManager';
 import VM, { ViewNames } from '../Managers/viewManager';
-
+import { computePlayerFov } from '../Utils/FOVhandler'
 
 export const ActionName: string = 'Move';
 

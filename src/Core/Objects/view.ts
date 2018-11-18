@@ -2,6 +2,8 @@ import World from './world'
 import WM from '../Managers/worldManager'
 import { Display } from '../../../node_modules/@types/rot-js';
 import { WorldNameConstants} from '../Managers/worldManager';
+import {computePlayerFov, getCurrentFov, getPreviousFov} from '../Utils/FOVhandler';
+import Player from './player';
 
 
 export enum DisplayTypes{
@@ -50,19 +52,25 @@ export default class View {
         const [width, height] = this.getViewPortDimensions(displayToUse);
         displayToUse.clear();
 
+
+        // render explored map.
+        const exploMap = world.explorationMap;
         for (let x = 0; x < width; x++) {
             for (let y = 0; y < height; y++) {
-                const [world_x, world_y] = this.getWorldPosition(x,y);
-                const tile = world.getTileAt(world_x, world_y)
-                if(tile){
-                    const {ch, fg, bg} = tile.render();
-                    displayToUse.draw(x, y, ch, fg, bg)
-                }else{
-                    // render empty space
-                    displayToUse.draw(x, y, '#','#adaeb2', '#2c2e33')
+                const [wx, wy] = this.getWorldPosition(x,y);
+                const includes = exploMap.get(`${wx},${wy}`)
+                if(includes){
+                    const tile = world.getTileAt(wx, wy);
+                    if(tile){
+                        const { ch, fg, bg } = tile.render();
+                        displayToUse.draw(x, y, ch, fg, bg)
+                    }
                 }
             }
         }
+
+        // render visible map.
+        this.updateFov(display);
     }
 
     public center(x: number, y: number){
@@ -98,21 +106,44 @@ export default class View {
         }
     }
 
-    public updateWorldPositions(positions: Array<Array<number>>){     
+    public updateFov(display?: Display){
         const world = WM.getWorld(this._lookAtWorldName);
+        const displayToUse = display || this._display;
+        const fov = computePlayerFov(world);
+        world.addToExplorationMap(fov);
+        for (const [x, y] of fov) {
+            const tile = world.getTileAt(x, y)
+            const screenPos = this.getScreenPosition(x, y);
+            if (tile) {
+                if (screenPos) {
+                    const [spx, spy] = screenPos;
+                    const { ch, fg, bg } = tile.render();
+                    displayToUse.draw(spx, spy, ch, fg, bg)
+                }
+            } else {
+                // render empty space
+                displayToUse.draw(x, y, '#', '#adaeb2', '#2c2e33')
+            }
+        }
+    }
+
+    public updateWorldPositions(positions: Array<Array<number>>){     
+        const world = WM.getWorld(this._lookAtWorldName);     
+
+        // update specified Tiles;
         for(const pos of positions){
             const [wx, wy] = pos;
-            const screenPos = this.getScreenPosition(wx, wy)
+            const screenPos = this.getScreenPosition(wx, wy);
             if(screenPos){
                 const tile = world.getTileAt(wx, wy);
                 const [sx, sy] = screenPos;
-                if(tile){
-                    const { ch, fg, bg } = tile.render();
-                    this._display.draw(sx, sy, '', fg, bg)
-                    this._display.draw(sx, sy, ch, fg, bg)
-                }else{
-                    console.warn('No tile found to update')
-                }
+                    if(tile){
+                        const { ch, fg, bg } = tile.render();
+                        this._display.draw(sx, sy, '', fg, bg)
+                        this._display.draw(sx, sy, ch, fg, bg)
+                    }else{
+                        console.warn('No tile found to update')
+                    }
             }
         }
     }
