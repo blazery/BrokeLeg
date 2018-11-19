@@ -1,9 +1,10 @@
 import World from './world'
 import WM from '../Managers/worldManager'
-import { Display } from '../../../node_modules/@types/rot-js';
+import { Display } from 'rot-js';
 import { WorldNameConstants} from '../Managers/worldManager';
 import {computePlayerFov, getCurrentFov, getPreviousFov} from '../Utils/FOVhandler';
 import Player from './player';
+import { IRenderInfo } from './entity';
 
 
 export enum DisplayTypes{
@@ -60,9 +61,9 @@ export default class View {
                 const [wx, wy] = this.getWorldPosition(x,y);
                 const includes = exploMap.get(`${wx},${wy}`)
                 if(includes){
-                    const tile = world.getTileAt(wx, wy);
-                    if(tile){
-                        const { ch, fg, bg } = tile.render();
+                    const renderInfo = world.render(wx, wy);
+                    if (renderInfo){
+                        const { ch, fg, bg } = renderInfo;
                         displayToUse.draw(x, y, ch, fg, bg)
                     }
                 }
@@ -112,12 +113,12 @@ export default class View {
         const fov = computePlayerFov(world);
         world.addToExplorationMap(fov);
         for (const [x, y] of fov) {
-            const tile = world.getTileAt(x, y)
+            const renderInfo = world.render(x, y)
             const screenPos = this.getScreenPosition(x, y);
-            if (tile) {
+            if (renderInfo) {
                 if (screenPos) {
                     const [spx, spy] = screenPos;
-                    const { ch, fg, bg } = tile.render();
+                    const { ch, fg, bg } = renderInfo;
                     displayToUse.draw(spx, spy, ch, fg, bg)
                 }
             } else {

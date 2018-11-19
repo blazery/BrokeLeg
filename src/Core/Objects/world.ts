@@ -2,6 +2,8 @@ import Tile from './tile'
 import {Player} from './player';
 import {RNG} from 'rot-js';
 import LightMap from './lightMap';
+import Wall from './wall';
+import { IRenderInfo } from './entity';
 
 export default class World{
     private _positions: Array<Array<Tile>>;
@@ -21,6 +23,17 @@ export default class World{
         this._dimensions = [width, height];
         this._name = name;
         this._lightMap = new LightMap(width, height, this);
+    }
+
+
+    public render(x: number, y: number): IRenderInfo | null{
+        const tile = this.getTileAt(x, y);
+        if(tile){
+            const renderInfo = tile.render();
+            const lightedTile = this._lightMap.shadeTile(x, y, renderInfo);
+            return lightedTile;
+        }
+        return null
     }
 
     private _computeLightMap(){
@@ -52,11 +65,12 @@ export default class World{
         for (let i = 0; i < width; i++) {
             this._positions[i] = []
             for (let j = 0; j < height; j++) {
-                this._positions[i][j] = new Tile({ x: i, y: j, isWall: !plan[i][j], worldName: this._name });
+                const objs = !plan[i][j] ? [new Wall({})] : [];
+                this._positions[i][j] = new Tile({ x: i, y: j, objects: objs, worldName: this._name });
             }
         }
         this._dimensions = [width, height];
-        //this._computeLightMap();
+        this._computeLightMap();
     }
 
     public spawnPlayer(player: Player){

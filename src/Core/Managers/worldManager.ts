@@ -1,4 +1,4 @@
-import World from '../Objects/World'
+import World from '../Objects/world'
 import * as Rot from 'rot-js';
 
 export const WorldNameConstants = {

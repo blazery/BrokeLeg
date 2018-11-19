@@ -4,6 +4,7 @@ import * as ROT from 'rot-js';
 import World from './world';
 import LightTile from './lightTile';
 import VM, {ViewNames} from '../Managers/viewManager';
+import { IRenderInfo } from './entity';
 
 export default class LightMap {
     private _positions: Array<Array<LightTile>>;
@@ -24,6 +25,20 @@ export default class LightMap {
         this._fov = new ROT.FOV.PreciseShadowcasting(this._checkLightPassibility, {topology: 8});
     }
 
+    public shadeTile(x: number, y: number, info: IRenderInfo): IRenderInfo | null{
+        const light = this.getTileAt(x,y);
+        if(light){
+            return light.shade(info);
+        }
+        return null;
+    }
+
+    public getTileAt(x: number, y: number): LightTile | null {
+        const column = this._positions[x];
+        if (column && column[y]) return column[y];
+        return null
+    }
+
 
     public compute(){
         const lighting = new ROT.Lighting(this._checkLightReflectivity, {range: 12})
@@ -36,21 +51,17 @@ export default class LightMap {
     }
 
     private _lightingCallback = (x: number, y:number, color: [number, number, number]) => {
-        const view = VM.getView(ViewNames.MAIN)
-        view.currentDisplay.draw(x, y, '.', undefined, ROT.Color.toRGB(color));
+       const xArray = this._positions[x];
+       const value = xArray && xArray[y];
+       if(value){
+           value.color = color;
+       }
     }
 
     private _checkLightPassibility = (x: number, y: number) => {
         const tile = this._world.getTileAt(x, y);
         if(tile){
-            const objects = tile.Objects as any;
-            for (const obj of objects){
-                const lp = obj.lightPasses;
-                if (lp === false){
-                    return false;
-                }
-            }
-            return true;
+            return !tile.hasWall;
          }else{
             return false;
         }
