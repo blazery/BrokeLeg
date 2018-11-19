@@ -13,6 +13,13 @@ export interface IRenderInfo {
     bg?: string;
 }
 
+export interface IEntiryRenderInfo {
+    ch: string;
+    prio: number;
+    fg?: string;
+    bg?: string;
+}
+
 export default abstract class Entity {
     protected _currentWorld: string
     protected _position: [number, number]
@@ -24,7 +31,7 @@ export default abstract class Entity {
         this._propContainer = new PropertyContainer();
     }
 
-    public render(): IRenderInfo | null {
+    public render(): IEntiryRenderInfo | null {
         console.warn(notImplementedError);
         return null;
     }

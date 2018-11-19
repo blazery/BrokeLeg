@@ -1,8 +1,9 @@
 import { WorldNameConstants } from "../Managers/worldManager";
 import { notImplementedError } from '../Errors/error';
-import Entity, { IEntityOptions } from "./entity";
+import Entity, { IEntityOptions, IEntiryRenderInfo } from "./entity";
 import PropertyContainer from "./Properties/propertyContainer";
 import ImpassibleProperty from "./Properties/impassible";
+import { LoDashImplicitStringWrapper } from "../../../node_modules/@types/lodash";
 
 export interface IWallOptions extends IEntityOptions {
     world?: string;
@@ -18,8 +19,8 @@ export default class Wall extends Entity {
         ]);
     }
 
-    public render() {
-        return { ch: '#', fg: '#adaeb2', bg: '#2c2e33' }
+    public render(): IEntiryRenderInfo {
+        return { ch: '#', fg: '#adaeb2', bg: '#2c2e33', prio: 4}
     }
 
     public setPosition(x: number, y: number, worldName: string): void {

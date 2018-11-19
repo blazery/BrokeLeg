@@ -11,13 +11,14 @@ export default class LightMap {
     private _dimensions: Array<number>;
     private _world: World
     private _fov: ROT.FOV.PreciseShadowcasting;
+    private _ambientLight: string = '#000000'
 
     constructor(width: number, height: number, world: World) {
         this._positions = [];
         for (let i = 0; i < width; i++) {
             this._positions[i] = []
             for (let j = 0; j < height; j++) {
-                this._positions[i][j] = new LightTile();
+                this._positions[i][j] = new LightTile({ambientLight: this._ambientLight});
             }
         }
         this._dimensions = [width, height];

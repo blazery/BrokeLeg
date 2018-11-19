@@ -29,16 +29,25 @@ export default class Tile {
     }
 
     public render(): IRenderInfo {
-        const [x,y] = this._position;
+        
+        const objectTokens = this._objects.map((el) => el.render()).sort((a, b) => (a && b && a.prio - b.prio) || 0);
 
-        if(this._objects.length){
-            const renderInfo = this._objects[0].render();
-            if(renderInfo){
-                return {...renderInfo}
+        // add default;
+        objectTokens.push({ ch: '⋅', fg: '#adaeb2', bg: '#2c2e33', prio: -1 });
+
+        // find characters to show
+        const info: any = {};
+        for (const obj of objectTokens){
+            if(obj){
+                if (!info.ch) info.ch = obj.ch;
+                if (!info.fg) info.fg = obj.fg;
+                if (!info.bg) info.bg = obj.bg;
+                if (info.ch && info.fg && info.bg) break;
             }
         }
+        
 
-        return {ch: '⋅', fg: '#adaeb2', bg: '#2c2e33'}
+        return info;
     }
 
     public addEntity(ent: Player){

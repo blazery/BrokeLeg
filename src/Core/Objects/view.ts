@@ -136,10 +136,10 @@ export default class View {
             const [wx, wy] = pos;
             const screenPos = this.getScreenPosition(wx, wy);
             if(screenPos){
-                const tile = world.getTileAt(wx, wy);
+                const renderInfo = world.render(wx, wy);
                 const [sx, sy] = screenPos;
-                    if(tile){
-                        const { ch, fg, bg } = tile.render();
+                if (renderInfo){
+                        const { ch, fg, bg } = renderInfo;
                         this._display.draw(sx, sy, '', fg, bg)
                         this._display.draw(sx, sy, ch, fg, bg)
                     }else{

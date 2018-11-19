@@ -2,7 +2,7 @@ import { WorldNameConstants } from "../Managers/worldManager";
 import Move, {Directions} from '../Actions/move';
 import Action from '../Actions/action';
 import VM, { ViewNames } from '../Managers/viewManager';
-import Entity, { IEntityOptions } from "./entity";
+import Entity, { IEntityOptions, IEntiryRenderInfo } from "./entity";
 
 export interface IPlayerOptions extends IEntityOptions {
 
@@ -26,8 +26,8 @@ export class Player extends Entity {
         ])
     }
 
-    public render() {
-        return { ch: '☻', fg: '#f736ad' }
+    public render(): IEntiryRenderInfo{
+        return { ch: '☻', fg: '#f736ad', prio: 3}
     }
 
     public doAction(actionName: string, opt: any){

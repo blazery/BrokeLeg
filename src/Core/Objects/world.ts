@@ -76,8 +76,10 @@ export default class World{
     public spawnPlayer(player: Player){
         const [w, h] = this._dimensions;
         for(let i = 0; i < 100; i++){
-        const x = RNG.getUniformInt(0, w -2)
-        const y = RNG.getUniformInt(0, h - 2)
+        // const x = RNG.getUniformInt(0, w - 2)
+        // const y = RNG.getUniformInt(0, h - 2)
+            const x = RNG.getUniformInt(0, 45)
+            const y = RNG.getUniformInt(0, 45)
         const tile = this.getTileAt(x,y);
             if(tile && !tile.hasWall){
                 tile.addEntity(player);
