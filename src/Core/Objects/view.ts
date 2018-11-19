@@ -65,6 +65,8 @@ export default class View {
                     if (renderInfo){
                         const { ch, fg, bg } = renderInfo;
                         displayToUse.draw(x, y, ch, fg, bg)
+                    } else {
+                        displayToUse.draw(x, y, '#', '#adaeb2', '#000000')
                     }
                 }
             }
@@ -115,16 +117,16 @@ export default class View {
         for (const [x, y] of fov) {
             const renderInfo = world.render(x, y)
             const screenPos = this.getScreenPosition(x, y);
-            if (renderInfo) {
-                if (screenPos) {
-                    const [spx, spy] = screenPos;
+            if (screenPos) {
+                const [spx, spy] = screenPos;
+                if (renderInfo) {
                     const { ch, fg, bg } = renderInfo;
                     displayToUse.draw(spx, spy, ch, fg, bg)
+                } else {
+                    // render empty space
+                    displayToUse.draw(spx, spy, '#', '#adaeb2', '#000000')
                 }
-            } else {
-                // render empty space
-                displayToUse.draw(x, y, '#', '#adaeb2', '#2c2e33')
-            }
+            }   
         }
     }
 

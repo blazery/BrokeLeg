@@ -13,7 +13,7 @@ export const  computePlayerFov = (world: World ) =>{
         if (tile) {
            return !tile.hasWall
         }
-        return true;
+        return false;
     }
 
     const fov = new ROT.FOV.PreciseShadowcasting(_checkLightPassibility);
