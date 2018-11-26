@@ -5,7 +5,7 @@ import Player from '../Objects/player';
 let currentFOV: Array<Array<number>> =[]
 let previousFOV: Array<Array<number>> = [];
 
-
+// doesn't need world , can use players current world.
 export const  computePlayerFov = (world: World ) =>{
     /* input callback */
     const _checkLightPassibility = (x: number, y: number) => {

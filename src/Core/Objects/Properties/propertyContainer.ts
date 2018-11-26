@@ -23,7 +23,7 @@ export default class PropertyContainer{
             entries.forEach( ([k, v]: Array<any>) => {
                 if(!newProps[k]){
                     newProps[k] = v;
-                }else{
+                } else {
                     throw propertyAlreadyDefined;
                 }
             });
