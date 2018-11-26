@@ -2,9 +2,8 @@
 
 export default abstract class Property {
 
-    public values: object;
+    private _values: object = {}
 
     constructor(options: any) {
-        this.values = {};
     }
 }

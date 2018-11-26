@@ -41,8 +41,7 @@ export class Player extends Entity {
     }
 
     public setPosition(x: number, y: number, worldName: string){
-        this._position = [x,y]
-        this._currentWorld = worldName;
+        super.setPosition(x, y, worldName);
 
         const view = VM.getView(ViewNames.MAIN)
         if(view){

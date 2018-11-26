@@ -6,6 +6,7 @@ import LightTile from './lightTile';
 import VM, {ViewNames} from '../Managers/viewManager';
 import { IRenderInfo } from './entity';
 
+// could be an abstraction of world
 export default class LightMap {
     private _positions: Array<Array<LightTile>>;
     private _dimensions: Array<number>;
