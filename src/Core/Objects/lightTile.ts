@@ -15,8 +15,8 @@ export default class LightTile {
         this._ambientLight = options.ambientLight;
     }
 
-    public shade(info: IRenderInfo){
-        if(this._color){
+    public shade(info: IRenderInfo, inFOV:boolean){
+        if(this._color && inFOV){
                 const color = ROT.Color.multiply(this._color, ROT.Color.fromString(info.bg || this._ambientLight))
                 return { ...info, bg: ROT.Color.toHex(color) }
         }

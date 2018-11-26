@@ -61,7 +61,7 @@ export default class View {
                 const [wx, wy] = this.getWorldPosition(x,y);
                 const includes = exploMap.get(`${wx},${wy}`)
                 if(includes){
-                    const renderInfo = world.render(wx, wy);
+                    const renderInfo = world.render(wx, wy, false);
                     if (renderInfo){
                         const { ch, fg, bg } = renderInfo;
                         displayToUse.draw(x, y, ch, fg, bg)
@@ -115,7 +115,7 @@ export default class View {
         const fov = computePlayerFov(world);
         world.addToExplorationMap(fov);
         for (const [x, y] of fov) {
-            const renderInfo = world.render(x, y)
+            const renderInfo = world.render(x, y, true)
             const screenPos = this.getScreenPosition(x, y);
             if (screenPos) {
                 const [spx, spy] = screenPos;

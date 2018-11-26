@@ -2,7 +2,9 @@ import { WorldNameConstants } from "../Managers/worldManager";
 import Move, {Directions} from '../Actions/move';
 import Action from '../Actions/action';
 import VM, { ViewNames } from '../Managers/viewManager';
-import Entity, { IEntityOptions, IEntiryRenderInfo } from "./entity";
+import Entity, { IEntityOptions, IEntiryRenderInfo, TriggerStrings } from "./entity";
+import Carry from "./Properties/carry";
+import Lighter from './lighter'
 
 export interface IPlayerOptions extends IEntityOptions {
 
@@ -20,6 +22,8 @@ export class Player extends Entity {
         this._health = 10;
         this._hunger = 0
         this._legPower = 50;
+
+        this._propContainer.addProperty(new Carry({entity: this, items: [new Lighter({world: this._currentWorld, position: this._position})] }) )
 
         this._actions = new Map<string, Action>([
             [Move.name, new Move({ dirs: (<any>Object).values(Directions), centerCamera: true})]
@@ -43,13 +47,18 @@ export class Player extends Entity {
     public setPosition(x: number, y: number, worldName: string){
         super.setPosition(x, y, worldName);
 
+        // update world based on movement
+        this._propContainer.trigger(TriggerStrings.MOVE);        
+
+
+        // trigger rerender
         const view = VM.getView(ViewNames.MAIN)
         if(view){
             view.center(x, y);
             view.updateFov();
         }
-        
     }
+    
     public get position() {
         return this._position;
     }
