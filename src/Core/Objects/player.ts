@@ -2,34 +2,32 @@ import { WorldNameConstants } from "../Managers/worldManager";
 import Move, {Directions} from '../Actions/move';
 import Action from '../Actions/action';
 import VM, { ViewNames } from '../Managers/viewManager';
+import Entity, { IEntityOptions, IEntiryRenderInfo } from "./entity";
 
-export interface IPlayerOptions {
+export interface IPlayerOptions extends IEntityOptions {
 
 }
 
-export class Player {
+export class Player extends Entity {
     private _health: number
     private _legPower: number
     private _hunger: number
-    private _currentWorld: string
-    private _position: Array<number>
     private _actions: Map<string, Action>
 
 
-    constructor({}: IPlayerOptions) {
+    constructor(options: IPlayerOptions) {
+        super(options);
         this._health = 10;
         this._hunger = 0
         this._legPower = 50;
-        this._position = [0,0]; 
-        this._currentWorld = WorldNameConstants.DEFAULT;
 
         this._actions = new Map<string, Action>([
             [Move.name, new Move({ dirs: (<any>Object).values(Directions), centerCamera: true})]
         ])
     }
 
-    public render() {
-        return { ch: '☻', fg: '#f736ad' }
+    public render(): IEntiryRenderInfo{
+        return { ch: '☻', fg: '#f736ad', prio: 3}
     }
 
     public doAction(actionName: string, opt: any){
@@ -46,10 +44,12 @@ export class Player {
         this._position = [x,y]
         this._currentWorld = worldName;
 
-        if(this._health){
-            const view = VM.getView(ViewNames.MAIN)
-            view && view.center(x,y);
+        const view = VM.getView(ViewNames.MAIN)
+        if(view){
+            view.center(x, y);
+            view.updateFov();
         }
+        
     }
     public get position() {
         return this._position;

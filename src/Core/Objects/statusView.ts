@@ -1,7 +1,7 @@
 import World from './world'
 import WM from '../Managers/worldManager'
-import Player from '../Objects/player';
-import { Display } from '../../../node_modules/@types/rot-js';
+import Player from './player';
+import { Display } from 'rot-js';
 import View, { IViewOptions } from './view'
 
 

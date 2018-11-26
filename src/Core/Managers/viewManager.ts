@@ -1,6 +1,6 @@
 import View from '../Objects/view';
 import * as Rot from 'rot-js';
-import { Display } from '../../../node_modules/@types/rot-js';
+import { Display } from 'rot-js';
 import {WorldNameConstants} from './worldManager';
 import StatusView from '../Objects/statusView';
 

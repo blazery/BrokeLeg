@@ -1,11 +1,11 @@
 import {Player} from "./player";
+import Entity, { IRenderInfo } from "./entity";
 
 export interface ITileOptions {
     x: number;
     y: number;
     worldName: string
-    isWall?: boolean;
-    objects? : Array<Player>;
+    objects? : Array<Entity>;
 }
 
 export interface ITileRender {
@@ -18,31 +18,36 @@ export interface ITileRender {
 
 export default class Tile {
     private _position: Array<number>;
-    private _objects: Array<Player>;
-    private _hasWall: boolean;
+    private _objects: Array<Entity>;
     private _worldName: string;
 
 
-    constructor({ x, y, isWall, objects, worldName}: ITileOptions) {
+    constructor({ x, y, objects, worldName}: ITileOptions) {
         this._position = [x,y]
-        this._hasWall = !!isWall;
         this._objects = objects || [];
         this._worldName = worldName;
     }
 
-    public render(): ITileRender {
-        const [x,y] = this._position;
+    public render(): IRenderInfo {
+        
+        const objectTokens = this._objects.map((el) => el.render()).sort((a, b) => (a && b && a.prio - b.prio) || 0);
 
-        if(this._objects.length){
-            const renderInfo = this._objects[0].render();
-            return { x, y, ...renderInfo}
+        // add default;
+        objectTokens.push({ ch: '⋅', fg: '#adaeb2', bg: '#2c2e33', prio: -1 });
+
+        // find characters to show
+        const info: any = {};
+        for (const obj of objectTokens){
+            if(obj){
+                if (!info.ch) info.ch = obj.ch;
+                if (!info.fg) info.fg = obj.fg;
+                if (!info.bg) info.bg = obj.bg;
+                if (info.ch && info.fg && info.bg) break;
+            }
         }
+        
 
-        if(this._hasWall){
-            return { x, y, ch: '#', fg: '#adaeb2', bg:'#2c2e33' }
-        }
-
-        return { x, y, ch: '⋅', fg: '#adaeb2', bg: '#2c2e33'}
+        return info;
     }
 
     public addEntity(ent: Player){
@@ -60,7 +65,17 @@ export default class Tile {
         const result = this._objects.splice(index,1)
     }
 
-    public get hasWall(){
-        return this._hasWall;
+    public get hasWall(): boolean{
+        for(const o of this._objects){
+            const {isPassible} = o.props;
+            if (isPassible && !isPassible()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public get Objects(){
+        return this._objects;
     }
 }
