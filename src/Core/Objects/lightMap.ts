@@ -9,7 +9,7 @@ export default class LightMap {
     private _positions: Array<Array<LightTile>>;
     private _dimensions: Array<number>;
     private _world: World
-    private _fov: ROT.FOV.PreciseShadowcasting;
+    private _fov: ROT.FOV.RecursiveShadowcasting;
     private _ambientLight: string = '#000000'
     private _lightScources: Array<Entity> = [];
     private _lightMapNeedsUpdate: boolean = false;
@@ -24,7 +24,7 @@ export default class LightMap {
         }
         this._dimensions = [width, height];
         this._world = world;
-        this._fov = new ROT.FOV.PreciseShadowcasting(this._checkLightPassibility, {topology: 8});
+        this._fov = new ROT.FOV.RecursiveShadowcasting(this._checkLightPassibility, {topology: 8});
     }
 
     public registerLightScource(e: Entity){

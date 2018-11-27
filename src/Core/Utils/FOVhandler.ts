@@ -16,7 +16,7 @@ export const  computePlayerFov = (world: World ) =>{
         return false;
     }
 
-    const fov = new ROT.FOV.PreciseShadowcasting(_checkLightPassibility);
+    const fov = new ROT.FOV.RecursiveShadowcasting(_checkLightPassibility);
     const [px, py] = Player.position;
     const result = [] as Array<Array<number>>;
     fov.compute(px, py, 10, (x, y, r, visibility) => {
