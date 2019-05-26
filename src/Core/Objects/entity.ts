@@ -1,6 +1,7 @@
 import { WorldNameConstants } from "../Managers/worldManager";
 import { notImplementedError} from '../Errors/error';
 import PropertyContainer from "./Properties/propertyContainer";
+import Move from "../Actions/move";
 
 export interface IEntityOptions {
         world?: string;
@@ -18,6 +19,15 @@ export interface IEntiryRenderInfo {
     prio: number;
     fg?: string;
     bg?: string;
+}
+
+export interface ITrigger{
+    func: Function;
+    triggers: [string]
+}
+
+export const TriggerStrings = {
+    MOVE: 'MOVE',
 }
 
 export default abstract class Entity {
@@ -51,5 +61,9 @@ export default abstract class Entity {
 
     public get props(): any {
         return this._propContainer.props;
+    }
+
+    public bindTrigger(info: ITrigger ): void{
+        this._propContainer.bindTrigger(info);
     }
 }

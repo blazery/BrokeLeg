@@ -26,11 +26,11 @@ export default class World{
     }
 
 
-    public render(x: number, y: number): IRenderInfo | null{
+    public render(x: number, y: number, inFOV: boolean = true): IRenderInfo | null{
         const tile = this.getTileAt(x, y);
         if(tile){
             const renderInfo = tile.render();
-            const lightedTile = this._lightMap.shadeTile(x, y, renderInfo);
+            const lightedTile = this._lightMap.shadeTile(x, y, inFOV, renderInfo);
             return lightedTile;
         }
         return null
@@ -38,6 +38,10 @@ export default class World{
 
     private _computeLightMap(){
         this._lightMap.compute();
+    }
+
+    get lightMap() {
+        return this._lightMap;
     }
 
     public getTileAt(x: number, y: number): Tile | null {
